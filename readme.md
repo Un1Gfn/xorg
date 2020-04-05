@@ -7,6 +7,8 @@
 [<sup>O</sup>]()
 -->
 
+See also [wayland](https://github.com/Un1Gfn/wayland)
+
 ---
 
 * [Kernel Mode Setting](https://www.kernel.org/doc/html/latest/gpu/drm-kms.html)
