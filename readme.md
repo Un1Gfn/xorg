@@ -1,5 +1,4 @@
 !!! NEVER EVER INSTALL [XF86-VIDEO-INTEL](https://www.archlinux.org/packages/extra/x86_64/xf86-video-intel/) !!!
-
 [<sup>O</sup>](https://www.reddit.com/r/archlinux/comments/6am55w/is_xf86videointel_still_needed/)
 [<sup>O</sup>](https://askubuntu.com/questions/1200289/performance-issues-modesetting-vs-xf86-video-intel)
 [<sup>O</sup>](https://forum.peppermintos.com/index.php?topic=7957.0)
@@ -10,15 +9,13 @@
 
 ---
 
-[Kernel Mode Setting](https://www.kernel.org/doc/html/latest/gpu/drm-kms.html)
-* [Archwiki](https://wiki.archlinux.org/index.php/Kernel_mode_setting)
-* [Wikipedia](https://en.wikipedia.org/wiki/Mode_setting)
-
-[i3](https://i3wm.org/)
-* [GitHub](https://github.com/i3/i3)
-
-[picom](https://github.com/yshui/picom)
-* [Archwiki](https://wiki.archlinux.org/index.php/Picom)
+* [Kernel Mode Setting](https://www.kernel.org/doc/html/latest/gpu/drm-kms.html)
+  * [Archwiki](https://wiki.archlinux.org/index.php/Kernel_mode_setting)
+  * [Wikipedia](https://en.wikipedia.org/wiki/Mode_setting)
+* [i3](https://i3wm.org/)
+  * [GitHub](https://github.com/i3/i3)
+* [picom](https://github.com/yshui/picom)
+  * [Archwiki](https://wiki.archlinux.org/index.php/Picom)
 
 ```
 $ inxi -G
@@ -41,3 +38,4 @@ Graphics:  Device-1: Intel Mobile 4 Series Integrated Graphics driver: i915 v: k
 
 
 
+cp /etc/X11/xorg.conf.d/20-intel.conf.old _etc_X11_xorg.conf.d_20-intel.conf
