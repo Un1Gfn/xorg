@@ -1,0 +1,34 @@
+#include <gtk/gtk.h>
+
+int main(int argc, char* argv[])
+{
+
+  gtk_init(&argc,&argv);
+
+  GtkWidget *window, *label;
+  window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  label=gtk_label_new("Hola Mundo\nHola Mundo\nHola Mundo\nHola Mundo\nHola Mundo");
+  // Cast "label" to the correct type
+  // Next time we create a button which changes the text
+  gtk_label_set_text(GTK_LABEL(label),"World hello");
+
+  g_signal_connect(
+    window,
+    "delete-event",
+    G_CALLBACK(gtk_main_quit),NULL
+  );
+
+  // A button is a container
+  // add a "label" to the "window"
+  gtk_container_add(GTK_CONTAINER(window),label);
+
+  // Make the entire thing visible
+  // The whole window is resized to the size of the label widget
+  gtk_widget_show_all(window);
+
+
+  gtk_main();
+  return 0;
+
+
+}
