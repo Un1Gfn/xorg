@@ -11,6 +11,66 @@ See also [wayland](https://github.com/Un1Gfn/wayland)
 
 ---
 
+###### Force 1080P
+
+* https://askubuntu.com/a/776502
+
+```
+cvt 1920 1080 60
+# 1920x1080 59.96 Hz (CVT 2.07M9) hsync: 67.16 kHz; pclk: 173.00 MHz
+Modeline "1920x1080_60.00"  173.00  1920 2048 2248 2576  1080 1083 1088 1120 -hsync +vsync
+
+xrandr --newmode "1920x1080_60.00"  173.00  1920 2048 2248 2576  1080 1083 1088 1120 -hsync +vsync
+xrandr --verbose --addmode VGA-1 "1920x1080_60.00"
+xrandr --output VGA-1 --mode "1920x1080_60.00"
+xrandr --output VGA-1 --mode 640x480
+xrandr --output VGA-1 --mode 1024x768
+xrandr --output VGA-1 --auto
+```
+
+```bash
+function f {
+  item="$(cvt $1 $2 $3 | tail -1 | cut -b 10-)"
+  title="$(echo "$item" | cut -d ' ' -f 1)"
+  echo "$item"
+  echo "$title"
+  xrandr --newmode $item
+  xrandr --verbose --addmode VGA-1 "$title"
+  xrandr --output VGA-1 --mode "$title"
+}
+f 1920 1080 60
+f 1920 1200 60
+f 1400 1050 60
+# f 1366 768 60
+```
+
+```bash
+# xrandr --verbose --output LVDS-1 --off
+xrandr --verbose --output VGA-1 --mode 1024x768
+xrandr --verbose --delmode VGA-1 new_mode
+xrandr --verbose --rmmode new_mode
+
+# xrandr --verbose --newmode new_mode $(cvt 1920 1080 60 | tail -1 | cut -d' ' -f3-)
+xrandr --verbose --newmode new_mode $(cvt 1600 900 60 | tail -1 | cut -d' ' -f3-)
+xrandr --verbose --addmode VGA-1 new_mode
+xrandr --verbose --output VGA-1 --mode new_mode
+sleep 13
+xrandr --verbose --output VGA-1 --mode 1024x768
+
+xrandr --verbose --output VGA-1 --transform 1,0,0,0,1,0,0,0,1
+
+xrandr --verbose --output VGA-1 --transform 1,0,0,0,1,0,0,0,1
+xrandr --verbose --output VGA-1 --transform 1,0,0,0,2,0,0,0,1
+
+xrandr --verbose --output VGA-1 --transform 1,0,0,0,1,0,0,0,1
+xrandr --verbose --output VGA-1 --transform 1,0,50,0,1,50,0,0,1
+```
+
+```bash
+xrandr --transform 
+```
+
+
 ###### kms+xorg+picom+i3
 
 * [Kernel Mode Setting](https://www.kernel.org/doc/html/latest/gpu/drm-kms.html)
