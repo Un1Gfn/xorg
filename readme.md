@@ -1,3 +1,7 @@
+https://www.reddit.com/r/archlinux/comments/6la6n5/trying_to_understand_drm_dri_mesa_radeon_gallium/
+
+[i3 2x2 grid](https://faq.i3wm.org/question/4542/howd-i-move-4-windows-in-a-2x2-grid.1.html)
+
 !!! NEVER EVER INSTALL [XF86-VIDEO-INTEL](https://www.archlinux.org/packages/extra/x86_64/xf86-video-intel/) !!!
 [<sup>O</sup>](https://www.reddit.com/r/archlinux/comments/6am55w/is_xf86videointel_still_needed/)
 [<sup>O</sup>](https://askubuntu.com/questions/1200289/performance-issues-modesetting-vs-xf86-video-intel)
@@ -28,36 +32,60 @@ xrandr --output VGA-1 --mode 1024x768
 xrandr --output VGA-1 --auto
 ```
 
+New mode only
+
 ```bash
-function f {
-  item="$(cvt $1 $2 $3 | tail -1 | cut -b 10-)"
-  title="$(echo "$item" | cut -d ' ' -f 1)"
-  echo "$item"
-  echo "$title"
-  xrandr --newmode $item
-  xrandr --verbose --addmode VGA-1 "$title"
-  xrandr --output VGA-1 --mode "$title"
+export DISPLAY=:0.0
+MONITOR="VGA-0"
+function new {
+  set -x
+  xrandr --verbose --newmode new_mode $(cvt $1 $2 60 | tail -1 | cut -d' ' -f3-)
+  xrandr --verbose --addmode "$MONITOR" new_mode
+  xrandr --verbose --output "$MONITOR" --mode new_mode
+  set +x
 }
-f 1920 1080 60
-f 1920 1200 60
-f 1400 1050 60
-# f 1366 768 60
+function del {
+  set -x
+  xrandr --verbose --output "$MONITOR" --mode 1024x768
+  xrandr --verbose --delmode "$MONITOR" new_mode
+  xrandr --verbose --rmmode new_mode
+  set +x
+}
+new 1280 720
+del
 ```
+
+
+New mode and switch
 
 ```bash
 # xrandr --verbose --output LVDS-1 --off
-xrandr --verbose --output VGA-1 --mode 1024x768
-xrandr --verbose --delmode VGA-1 new_mode
-xrandr --verbose --rmmode new_mode
+# export DISPLAY=:0.0
+INT="VGA-1"
+EXT="HDMI-1"
+function advance {
+  xrandr --verbose --output "$EXT" --off
+  xrandr --verbose --output "$INT" --mode 1366x768
+  xrandr --verbose --delmode "$EXT" new_mode
+  xrandr --verbose --rmmode new_mode
+}
+function retreat {
+  xrandr --verbose --newmode new_mode $(cvt $1 $2 60 | tail -1 | cut -d' ' -f3-)
+  xrandr --verbose --addmode "$EXT" new_mode
+  xrandr --verbose --output "$INT" --off
+  xrandr --verbose --output "$EXT" --mode new_mode
+}
 
-# xrandr --verbose --newmode new_mode $(cvt 1920 1080 60 | tail -1 | cut -d' ' -f3-)
-xrandr --verbose --newmode new_mode $(cvt 1600 900 60 | tail -1 | cut -d' ' -f3-)
-xrandr --verbose --addmode VGA-1 new_mode
-xrandr --verbose --output VGA-1 --mode new_mode
-sleep 13
-xrandr --verbose --output VGA-1 --mode 1024x768
+new 1280 720
 
-xrandr --verbose --output VGA-1 --transform 1,0,0,0,1,0,0,0,1
+del
+
+new 1600 900
+xrandr --verbose --output VGA-1 --transform 1,0,-20,0,1,0,0,0,1
+
+
+del
+
 
 xrandr --verbose --output VGA-1 --transform 1,0,0,0,1,0,0,0,1
 xrandr --verbose --output VGA-1 --transform 1,0,0,0,2,0,0,0,1
@@ -70,6 +98,20 @@ xrandr --verbose --output VGA-1 --transform 1,0,50,0,1,50,0,0,1
 xrandr --transform 
 ```
 
+
+Handled by fcitx
+```bash
+man 7 xkeyboard-config
+localectl set-keymap us pc105
+localectl set-x11-keymap us pc105 " " " "
+```
+Generates /etc/X11/xorg.conf.d/00-keyboard.conf
+
+
+libinput-gestures
+```bash
+gpasswd -a darren input
+```
 
 ###### kms+xorg+picom+i3
 
